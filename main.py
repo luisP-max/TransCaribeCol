@@ -1,5 +1,6 @@
 from modulos.calculos import calcular_nomina
 from modulos.formateador import mostrar_volante
+from modulos.persistencia import guardar_reporte_txt
 
 def capturar_datos_del_empleado():
     print("--- REGISTRO DE EMPLEADOS ADMINISTRATIVOS ---")
@@ -29,3 +30,6 @@ if __name__ == "__main__":
 
         #formato en consola
         mostrar_volante(nombre, cargo, horas_trabajadas, horas_extras, resultados_calculados)
+
+        #persistencia fisica de datos
+        guardar_reporte_txt(nombre, cargo, horas_trabajadas, horas_extras, resultados_calculados)

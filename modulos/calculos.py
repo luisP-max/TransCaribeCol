@@ -20,7 +20,7 @@ def calcular_nomina(horas_trabajadas, horas_extras):
 
     descuento_salud = int(total_devengado * PCT_SALUD)
     descuento_pension = int(total_devengado * PCT_PENSION)
-    descuento_arl = int(total_devengado + PCT_ARL)
+    descuento_arl = int(total_devengado * PCT_ARL)
 
     total_descuentos = descuento_salud + descuento_pension + descuento_arl
 

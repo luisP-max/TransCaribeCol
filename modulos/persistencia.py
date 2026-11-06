@@ -16,7 +16,7 @@ def guardar_reporte_txt(nombre, cargo, horas_t, horas_e, resultados):
 
     #genera el bloque de texto con el mismo formato que aparece en la consola
 
-    total_ingreso = resultados['salario bruto'] + resultados['total_horas_extras']
+    total_ingreso = resultados['salario_bruto'] + resultados['total_horas_extras']
     
     contenido = (
         f"{'='*50}\n"

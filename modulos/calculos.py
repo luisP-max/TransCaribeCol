@@ -39,11 +39,6 @@ def calcular_nomina(horas_trabajadas, horas_extras):
         "total_a_pagar": total_a_pagar
     }
     
-    
-# ==========================================
-# NUEVA FUNCIÓN PARA EL PUNTO 2 (OPERATIVOS)
-# ==========================================
-
 
 
 def calcular_operativo(cargo):

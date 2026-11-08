@@ -15,3 +15,27 @@ ALIAS_CARGOS = {"vigilante": "vigilancia"}
 def normalizar_cargo(cargo):
     limpio = cargo.strip().lower()
     return "vigilante" if limpio == "vigilante" else limpio
+
+
+def obtener_info_riesgo(cargo):
+    limpio = cargo.strip().lowe()
+    limpio = ALIAS_CARGOS.get(limpio, limpio)
+    return Riesgo_ARL.get(limpio)
+
+def calcular_seguridad_social(salario_bruto, cargo):
+    info = obtener_info_riesgo(cargo)
+    if info is None:
+        return {"error": f"Cargo '{cargo}' sin nivel de riesgo definido."}
+    ibc = int(salario_bruto * PCT_IBC)
+    salud = int(ibc * PCT_SALUD)
+    pension = int(ibc * PCT_PENSION)
+    arl = int(ibc * info["pct_arl"])
+    total_aportes = salud + pension + arl
+
+    return {
+        "cargo": info["cargo"], "riesgo": info["riesgo"], "pct_arl": info["pct_arl"],
+        "salario_bruto": salario_bruto, "ibc": ibc,
+        "salud": salud, "pension": pension, "arl": arl,
+        "total_aportes": total_aportes,
+        "total_a_pagar": salario_bruto - total_aportes,
+    }

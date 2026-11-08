@@ -1,6 +1,8 @@
 from modulos.calculos import calcular_nomina, calcular_operativo 
 from modulos.formateador import mostrar_volante
 from modulos.persistencia import guardar_reporte_txt
+from modulos.seguridad_social import normalizar_cargo
+from modulos.volante_operativo import procesar_operativo, registrar_mas_operativos
 
 def capturar_datos_del_empleado():
     print("--- SISTEMA DE NÓMINA ---")
@@ -67,6 +69,7 @@ if __name__ == "__main__":
         cargo = input("Ingrese el cargo: ").strip()
 
         # Cálculos para operativos
+        cargo = normalizar_cargo(cargo)  # acepta "vigilancia" o "vigilante"
         resultados_operativo = calcular_operativo(cargo)
 
         if "error" in resultados_operativo:
@@ -80,5 +83,9 @@ if __name__ == "__main__":
             print(f"Salario Bruto: ${resultados_operativo['salario_bruto']:,.0f}")
             print(f"Total a Pagar: ${resultados_operativo['total_a_pagar']:,.0f}")
             print(f"Nota: {resultados_operativo['mensaje_seguridad_social']}")
+            
+            # aportes, matriz, volante y TXT
+            procesar_operativo(nombre, resultados_operativo)
+            registrar_mas_operativos()
     else:
         print("Opción no válida.")

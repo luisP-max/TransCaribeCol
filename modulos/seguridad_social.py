@@ -1,6 +1,6 @@
 PCT_IBC = 0.40     # IBC = 40% del valor del centro 
 PCT_SALUD = 0.125  # 12.5%
-PCT_PENSION = 0.6  # 16%
+PCT_PENSION = 0.16  # 16%
 
 
 # Nivel del riesgo y % de ARL por cargo 
@@ -18,7 +18,7 @@ def normalizar_cargo(cargo):
 
 
 def obtener_info_riesgo(cargo):
-    limpio = cargo.strip().lowe()
+    limpio = cargo.strip().lower()
     limpio = ALIAS_CARGOS.get(limpio, limpio)
     return Riesgo_ARL.get(limpio)
 

@@ -1,35 +1,44 @@
-# TransCaribeCol S.A.S. - Módulo de Nómina Administrativa
+# TransCaribeCol S.A.S. - Sistema Integral de Nómina
 
-Este repositorio contiene el sistema automatizado de procesamiento y liquidación de nómina en consola para el personal de **TransCaribeCol S.A.S.** El proyecto está diseñado de forma modular bajo el lenguaje **Python**, permitiendo una fácil escalabilidad para futuras integraciones del equipo de desarrollo.
+Este repositorio contiene la aplicación de consola para la gestión, liquidación y almacenamiento de nómina de **TransCaribeCol S.A.S.** El proyecto está desarrollado en **Python** bajo una arquitectura modular que permite gestionar tanto al personal administrativo como a los trabajadores operativos (prestación de servicios).
 
 ---
 
 ## Estado del Proyecto y Funcionalidades Implementadas
 
-Actualmente, se encuentra completado el **Módulo Base de Liquidación y Persistencia**. Las características implementadas hasta el momento son:
+El sistema cuenta con dos flujos principales seleccionados desde el menú inicial de consola:
 
-*   **Captura de Datos Dinámica:** Entrada por consola del nombre del empleado, horas normales y horas extras.
-*   **Motor de Cálculos:** Procesamiento automático del salario básico, horas extras con recargo y deducciones de ley estrictas bajo la normativa nacional colombiana (Salud 4%, Pensión 4%, ARL Riesgo I 0.522%).
-*   **Generador Visual de Volantes:** Impresión simétrica y tabulada del comprobante de pago con formato de moneda local.
-*   **Persistencia Local:** Almacenamiento automático de cada volante generado en formato `.txt` dentro del directorio `data/`.
+### 1. Módulo de Empleados Administrativos
+*   **Captura de Datos:** Registro por consola del nombre, horas normales trabajadas y horas extras del mes.
+*   **Liquidación Salarial:** Cálculo automático del salario básico (\$20.000/hora) y horas extras (\$25.000/hora).
+*   **Deducciones de Ley:** Aplicación de descuentos de Salud (4%), Pensión (4%) y ARL Riesgo I (0.522%) sobre el total devengado.
+*   **Volante y Persistencia:** Impresión del comprobante tabulado en consola y exportación automática en `data/nomina_<nombre>.txt`.
+
+### 2. Módulo de Empleados Operativos (Trabajadores Oficiales)
+*   **Gestión por Cargo:** Soporte para cargos operativos con horas mensuales fijas a \$40.000/hora: *Conductor* (160h), *Oficios Generales* (100h) y *Vigilancia* (336h).
+*   **Seguridad Social e IBC:** Cálculo del Ingreso Base de Cotización (IBC al 40% del contrato) y deducciones de Salud (12.5%), Pensión (16%) y ARL según el nivel de riesgo del cargo (Riesgo I, II o IV).
+*   **Registro Múltiple y Matriz Consolidada:** Bucle interactivo para liquidar múltiples trabajadores operativos en una misma sesión. Genera volantes individuales (`data/nomina_operativo_<nombre>.txt`) y consolida todos los registros en una tabla general exportada en `data/matriz_operativos.txt`.
 
 ---
 
 ## Estructura del Directorio
 
-El proyecto sigue una arquitectura modular separando las responsabilidades de entrada, procesamiento lógico, renderizado visual y almacenamiento de datos:
+El proyecto separa las responsabilidades de cálculo, formato visual, estructuras de datos y guardado de archivos planos dentro del paquete `modulos/`:
 
 ```text
 transcaribecol-nomina/
 │
-├── main.py                 # Punto de entrada de la aplicación (Menú y Flujo)
-├── modulos/                # Paquete de submódulos del sistema
-│   ├── __init__.py         # Inicializador del paquete
-│   ├── calculos.py         # Motor de fórmulas matemáticas y deducciones
-│   ├── formateador.py      # Estructura visual y renderizado del comprobante
-│   └── persistencia.py     # Manejo del sistema de archivos y guardado TXT
+├── main.py                      # Punto de entrada, menú principal y control de flujo
+├── modulos/                     # Paquete de submódulos del sistema
+│   ├── __init__.py              # Inicializador del paquete
+│   ├── calculos.py              # Fórmulas salariales para administrativos y operativos
+│   ├── seguridad_social.py      # Tablas de riesgo ARL y cálculo de aportes IBC (Operativos)
+│   ├── estructuras.py           # Gestión de matriz consolidada en memoria y formateo de tabla
+│   ├── formateador.py           # Renderizado visual del comprobante administrativo
+│   ├── persistencia.py          # Exportación de comprobantes administrativos a TXT
+│   └── volante_operativo.py     # Flujo completo, volantes y exportación de matriz operativa
 │
-└── data/                   # Directorio de persistencia física (Archivos .txt generados)
+└── data/                        # Directorio autogenerado con todos los reportes .txt
 ```
 
 ---
@@ -37,37 +46,15 @@ transcaribecol-nomina/
 ## Instrucciones de Instalación y Ejecución
 
 ### Prerrequisitos
-*   Python 3.x instalado en el sistema.
+*   Tener instalado **Python 3.x** en el sistema. No requiere librerías externas (usa únicamente módulos nativos como `os`).
 
-### Ejecución
-1. Clona este repositorio o navega hasta la carpeta del proyecto.
-2. Abre tu terminal y ejecuta el script principal:
+### Pasos para ejecutar
+1. Abre una terminal y ubícate en la carpeta raíz del proyecto.
+2. Ejecuta el archivo principal:
    ```bash
    python main.py
    ```
-3. Ingresa los datos solicitados en la consola para generar el volante de pago en pantalla y el archivo físico.
+3. Selecciona la opción deseada (`1` para Administrativo o `2` para Operativo) y sigue las instrucciones en pantalla.
+4. Consulta los archivos generados dentro de la carpeta `data/`.
 
 ---
-
-## Historial de Commits Desarrollados
-
-Para mantener la trazabilidad del código, la construcción de este módulo se estructuró bajo los siguientes commits consecutivos:
-
-1.  `feat: crear estructura inicial y captura de datos del empleado por consola`
-2.  `feat: estructurar carpetas del proyecto y crear módulo de cálculos de nómina`
-3.  `feat: crear módulo de formateo visual e importar lógica en el main.py`
-4.  `fix: corregir formula de deducción ARL y resolver neto negativo en nomina`
-5.  `feat: agregar módulo de persistencia para guardar volantes de pago en archivos TXT`
-
----
-
-## Instrucciones para el Equipo de Desarrollo (Siguientes Pasos)
-
-Para los compañeros encargados de las siguientes funcionalidades, por favor sigan los lineamientos establecidos para mantener la consistencia del proyecto:
-
-1.  **¿Dónde agregar nuevas funcionalidades?**
-    *   Creen su propio archivo descriptivo dentro de la carpeta `modulos/` (ej. `modulos/busqueda.py`, `modulos/reportes_generales.py`).
-    *   Importen sus funciones en el flujo del archivo `main.py` según corresponda.
-2.  **Documentación de Avances:**
-    *   Una vez que su funcionalidad esté completamente testeada y confirmada en consola, agreguen un bloque en este `README.md` bajo la sección *"Funcionalidades Implementadas"* detallando su nombre y el objetivo del módulo.
-    *   Mantengan la convención de commits (`feat:`, `fix:`, `refactor:`) utilizada hasta ahora.
